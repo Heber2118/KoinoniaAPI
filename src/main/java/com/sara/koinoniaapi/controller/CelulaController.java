@@ -1,13 +1,16 @@
 package com.sara.koinoniaapi.controller;
 
+import com.sara.koinoniaapi.dto.AssociarLiderDto;
 import com.sara.koinoniaapi.dto.CelulaDto;
+import com.sara.koinoniaapi.dto.CelulasLiderDto;
 import com.sara.koinoniaapi.model.Celula;
+import com.sara.koinoniaapi.model.Lider;
 import com.sara.koinoniaapi.repository.CelulaRepository;
 import com.sara.koinoniaapi.service.CelulaService;
+import com.sara.koinoniaapi.service.LiderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +25,18 @@ public class CelulaController {
     @GetMapping("/listar")
     public List<CelulaDto> listarCelulas() {
         return celulaService.listarCelulas();
+    }
+    @PostMapping("/cadastrar")
+    public CelulaDto cadastrarCelula(@RequestBody CelulaDto celulaDto) {
+        return celulaService.cadastrarCelula(celulaDto);
+    }
+
+    @PostMapping("/relacionar")
+    public ResponseEntity<Lider> relacionarLider(
+            @RequestParam Long liderId,
+            @RequestBody AssociarLiderDto dto) {
+        celulaService.relacionarCelula(liderId, dto);
+        return ResponseEntity.ok().build();
     }
 
 }

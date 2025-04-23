@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +22,11 @@ public class Celula {
 
     private String nome;
     private String endereco;
-    private String diaSemana;
-    private String horario;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "dia_semana")
+    private DayOfWeek diaSemana;
+    private LocalTime horario;
 
     @ManyToMany
     @JoinTable(
