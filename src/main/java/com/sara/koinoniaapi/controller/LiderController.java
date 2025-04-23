@@ -4,6 +4,7 @@ import com.sara.koinoniaapi.dto.CelulaDto;
 import com.sara.koinoniaapi.dto.CelulasLiderDto;
 import com.sara.koinoniaapi.dto.LiderDto;
 import com.sara.koinoniaapi.repository.LiderRepository;
+import com.sara.koinoniaapi.service.LiderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,31 +19,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LiderController {
 
-    private final LiderRepository liderRepository;
+    private final LiderService liderService;
 
     @GetMapping("/listar")
     public List<LiderDto> listarLideres(){
-        return liderRepository.findAll().stream().map(
-                lider -> new LiderDto(lider.getId(), lider.getNome(),
-                lider.getTelefone(), lider.getEmail(), lider.isAtivo())).toList();
+        return liderService.listarLiders();
     }
 
     @GetMapping("/{id}/celulas")
     public ResponseEntity<CelulasLiderDto> listarCelulasPorLider(@PathVariable Long id) {
-        return liderRepository.findById(id)
-                .map(lider -> {
-                    List<CelulaDto> celulas = lider.getCelulas().stream()
-                            .map(c -> new CelulaDto(
-                                    c.getId(), c.getNome(), c.getEndereco(),
-                                    c.getDiaSemana(), c.getHorario()))
-                            .toList();
-
-                    CelulasLiderDto dto = new CelulasLiderDto(
-                            lider.getId(), lider.getNome(), lider.getTelefone(), celulas);
-
-                    return ResponseEntity.ok(dto);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        return liderService.listarCelulasPorLider(id);
     }
 
 }
