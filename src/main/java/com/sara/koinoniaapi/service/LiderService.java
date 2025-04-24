@@ -3,7 +3,9 @@ package com.sara.koinoniaapi.service;
 import com.sara.koinoniaapi.dto.CelulaDto;
 import com.sara.koinoniaapi.dto.CelulasLiderDto;
 import com.sara.koinoniaapi.dto.LiderDto;
+import com.sara.koinoniaapi.model.Lider;
 import com.sara.koinoniaapi.repository.LiderRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,25 @@ public class LiderService {
                     return ResponseEntity.ok(dto);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @Transactional
+    public LiderDto atualizarLider(Long id, LiderDto liderdto) {
+
+        Lider lider = liderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Líder não encontrado na base de dados!"));
+        lider.setNome(liderdto.nome());
+        lider.setTelefone(liderdto.telefone());
+        lider.setEmail(liderdto.email());
+
+        Lider liderAtualizado = liderRepository.save(lider);
+        return new LiderDto(
+                liderAtualizado.getId(),
+                lider.getNome(),
+                lider.getTelefone(),
+                lider.getEmail(),
+                lider.isAtivo()
+        );
     }
 
 }

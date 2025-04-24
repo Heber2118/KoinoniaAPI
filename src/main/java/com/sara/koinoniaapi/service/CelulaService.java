@@ -51,4 +51,24 @@ public class CelulaService {
         return lider;
     }
 
+    public CelulaDto atualizarCelula(Long id, CelulaDto celulaDto) {
+       Celula celula = celulaRepository.findById(id)
+               .orElseThrow(() -> new RuntimeException("Célula não encontrada na base de dados!"));
+
+               celula.setNome(celulaDto.nome());
+               celula.setEndereco(celulaDto.endereco());
+               celula.setDiaSemana(celulaDto.diaSemana());
+               celula.setHorario(celulaDto.horario());
+
+               Celula salva = celulaRepository.save(celula);
+               return new CelulaDto(
+                       salva.getId(),
+                       salva.getNome(),
+                       salva.getEndereco(),
+                       salva.getDiaSemana(),
+                       salva.getHorario()
+               );
+
+    }
+
 }

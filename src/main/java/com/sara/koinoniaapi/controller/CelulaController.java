@@ -39,6 +39,12 @@ public class CelulaController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<CelulaDto> atualizarCelula(@PathVariable Long id, @RequestBody CelulaDto celulaDto) {
+        CelulaDto atualizada = celulaService.atualizarCelula(id, celulaDto);
+        return ResponseEntity.ok().body(atualizada);
+    }
+
 }
 
 
