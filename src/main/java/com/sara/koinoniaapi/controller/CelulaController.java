@@ -45,6 +45,13 @@ public class CelulaController {
         return ResponseEntity.ok().body(atualizada);
     }
 
+    @DeleteMapping("/dissociar")
+    public ResponseEntity<Void> disassociarCelula(@RequestParam Long celulaId,
+                                                  @RequestParam Long liderId) {
+        celulaService.dessasociarCelula(celulaId, liderId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
 
 

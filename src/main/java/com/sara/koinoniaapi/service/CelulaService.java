@@ -9,6 +9,7 @@ import com.sara.koinoniaapi.model.Lider;
 import com.sara.koinoniaapi.repository.CelulaLiderRepository;
 import com.sara.koinoniaapi.repository.CelulaRepository;
 import com.sara.koinoniaapi.repository.LiderRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +70,14 @@ public class CelulaService {
                        salva.getHorario()
                );
 
+    }
+
+    @Transactional
+    public void dessasociarCelula(Long celulaId, Long liderId) {
+        CelulaLider relacionamento = celulaLiderRepository.findByCelulaIdAndLiderId(celulaId, liderId)
+                .orElseThrow(() -> new RuntimeException("Relacionamento não encontrado na base de dados!"));
+
+        celulaLiderRepository.delete(relacionamento);
     }
 
 }
